@@ -39,3 +39,73 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+node_modules
+.env
+
+# Hardhat files
+/cache
+/artifacts
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
+
+# ===== MONADEAL PRODUCTION EXCLUSIONS =====
+
+# Documentation files (exclude all MD files except README.md)
+*.md
+!README.md
+
+# Development and optimization files
+PERFORMANCE_*.md
+PHASE_*.md
+ALERT_*.md
+COLD_START_*.md
+DEPLOYMENT_*.md
+MONADEAL_*.md
+SECTION_*.md
+
+# Build artifacts and cache
+artifacts/build-info/
+cache/solidity-files-cache.json
+abis-output.txt
+
+# Development scripts
+scripts/fix-build.js
+scripts/prewarm-pages.js
+simple-prewarm.js
+test-prewarm.js
+
+# IDE and development files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build cache
+.turbo/
+.cache/
+.eslintcache
+
+# Test files
+test-*.js
+dev-*.js
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/

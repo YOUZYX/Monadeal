@@ -1,0 +1,308 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id        String   @id @default(cuid())
+  address   String   @unique
+  ensName   String?
+  ensChecked Boolean  @default(false)  // Flag to track if we've checked for ENS name
+  avatar    String?      // For URL-based avatars (backward compatibility)
+  avatarImage String?    // For base64 uploaded images
+  username  String?
+  bio       String?
+  isOnline  Boolean  @default(false)
+  lastSeen  DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  dealsCreated     Deal[]    @relation("DealCreator")
+  dealsParticipant Deal[]    @relation("DealCounterparty")
+  messages         Message[]
+  notifications    Notification[]
+  transactions     Transaction[]
+
+  @@index([address])
+  @@index([isOnline])
+  @@map("users")
+}
+
+// Deal model
+model Deal {
+  id                    String    @id @default(cuid())
+  type                  DealType
+  status                DealStatus @default(PENDING)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  expiresAt             DateTime?
+  creatorAddress        String
+  counterpartyAddress   String?
+  nftContractAddress    String
+  nftTokenId            String
+  price                 String?   // In wei for buy/sell deals
+  swapNftContract       String?   // For swap deals
+  swapTokenId           String?   // For swap deals
+  escrowContractAddress String?
+  transactionHash       String?   // DEPRECATED: Use transactions relation instead
+  onchainDealId         String?   // Numeric deal ID from smart contract
+  completedAt           DateTime?
+  cancelledAt           DateTime?
+  
+  // Counter offer fields
+  counterOfferPrice     String?   // Counter offer price in wei
+  counterOfferBy        String?   // Address of who made the counter offer
+  counterOfferAt        DateTime? // When the counter offer was made
+  counterOfferStatus    CounterOfferStatus? // Status of the counter offer
+  
+  // Deal progress tracking
+  creatorDeposited      Boolean   @default(false)
+  counterpartyDeposited Boolean   @default(false)
+  
+  // Metadata
+  title                 String?
+  description           String?
+
+  // Relations
+  creator      User      @relation("DealCreator", fields: [creatorAddress], references: [address])
+  counterparty User?     @relation("DealCounterparty", fields: [counterpartyAddress], references: [address])
+  messages     Message[]
+  transactions Transaction[]
+  nft          NFT?      @relation("PrimaryNFT", fields: [nftContractAddress, nftTokenId], references: [contractAddress, tokenId])
+  swapNft      NFT?      @relation("SwapNFT", fields: [swapNftContract, swapTokenId], references: [contractAddress, tokenId])
+  notifications Notification[]
+
+  @@index([creatorAddress])
+  @@index([counterpartyAddress])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@index([nftContractAddress, nftTokenId])
+  @@index([counterOfferStatus])
+  @@map("deals")
+}
+
+// Transaction model for tracking all blockchain transactions related to deals
+model Transaction {
+  id            String            @id @default(cuid())
+  dealId        String
+  userAddress   String
+  type          TransactionType
+  status        TransactionStatus @default(PENDING)
+  hash          String            @unique
+  blockNumber   String?
+  gasUsed       String?
+  gasFee        String?
+  amount        String?           // For payment transactions
+  contractAddress String?         // Contract that was interacted with
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  confirmedAt   DateTime?
+  
+  // Relations
+  deal Deal @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userAddress], references: [address])
+
+  @@index([dealId])
+  @@index([userAddress])
+  @@index([type])
+  @@index([status])
+  @@index([hash])
+  @@index([createdAt])
+  @@map("transactions")
+}
+
+// NFT model for caching metadata
+model NFT {
+  contractAddress String
+  tokenId         String
+  name            String
+  description     String?
+  image           String?
+  imageUrl        String?
+  animationUrl    String?
+  externalUrl     String?
+  collectionName  String?
+  collectionSlug  String?
+  metadata        Json?
+  owner           String?
+  lastSalePrice   String?
+  floorPrice      String?
+  rarity          String?
+  traits          Json?
+  isValidated     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  primaryDeals Deal[] @relation("PrimaryNFT")
+  swapDeals    Deal[] @relation("SwapNFT")
+  collection   Collection? @relation(fields: [contractAddress], references: [address])
+
+  @@id([contractAddress, tokenId])
+  @@index([contractAddress])
+  @@index([owner])
+  @@index([collectionSlug])
+  @@index([isValidated])
+  @@map("nfts")
+}
+
+// Message model for chat
+model Message {
+  id            String      @id @default(cuid())
+  dealId        String
+  senderAddress String
+  content       String
+  timestamp     DateTime    @default(now())
+  type          MessageType @default(TEXT)
+  isRead        Boolean     @default(false)
+  editedAt      DateTime?
+  replyToId     String?
+
+  // Relations
+  deal     Deal     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  sender   User     @relation(fields: [senderAddress], references: [address])
+  replyTo  Message? @relation("MessageReply", fields: [replyToId], references: [id])
+  replies  Message[] @relation("MessageReply")
+
+  @@index([dealId])
+  @@index([senderAddress])
+  @@index([timestamp])
+  @@index([type])
+  @@map("messages")
+}
+
+// Notification model
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  dealId    String?
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [address])
+  deal Deal? @relation(fields: [dealId], references: [id])
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// Platform analytics model
+model PlatformAnalytics {
+  id                String   @id @default(cuid())
+  date              DateTime @unique @default(now())
+  totalUsers        Int      @default(0)
+  activeUsers       Int      @default(0)
+  totalDeals        Int      @default(0)
+  completedDeals    Int      @default(0)
+  cancelledDeals    Int      @default(0)
+  totalVolume       String   @default("0") // In wei
+  averageDealValue  String   @default("0") // In wei
+  topCollection     String?
+  createdAt         DateTime @default(now())
+
+  @@index([date])
+  @@map("platform_analytics")
+}
+
+// Collection model for tracking popular NFT collections
+model Collection {
+  id           String   @id @default(cuid())
+  address      String   @unique
+  name         String
+  slug         String   @unique
+  description  String?
+  image        String?
+  externalUrl  String?
+  floorPrice   String?
+  totalVolume  String   @default("0")
+  totalSales   Int      @default(0)
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  nfts         NFT[]
+
+  @@index([address])
+  @@index([slug])
+  @@index([isVerified])
+  @@index([totalVolume])
+  @@map("collections")
+}
+
+// Enums
+enum DealType {
+  BUY
+  SELL
+  SWAP
+}
+
+enum DealStatus {
+  PENDING
+  AWAITING_BUYER
+  AWAITING_SELLER
+  LOCKED_IN_ESCROW
+  COMPLETED
+  CANCELLED
+}
+
+enum CounterOfferStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum TransactionType {
+  CREATE_DEAL
+  ACCEPT_DEAL
+  APPROVE_NFT          // NEW: When NFT is approved for escrow contract
+  DEPOSIT_NFT
+  DEPOSIT_PAYMENT
+  UPDATE_PRICE         // NEW: When deal price is updated (counter offer accepted)
+  CANCEL_DEAL
+  COMPLETE_DEAL
+  COUNTER_OFFER
+  ACCEPT_COUNTER_OFFER
+  DECLINE_COUNTER_OFFER
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+enum MessageType {
+  TEXT
+  SYSTEM
+  DEAL_UPDATE
+  IMAGE
+  NFT_PREVIEW
+}
+
+enum NotificationType {
+  DEAL_CREATED
+  DEAL_ACCEPTED
+  DEAL_COMPLETED
+  DEAL_CANCELLED
+  MESSAGE_RECEIVED
+  DEPOSIT_MADE
+  SYSTEM_ANNOUNCEMENT
+}

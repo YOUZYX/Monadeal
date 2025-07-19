@@ -2,9 +2,19 @@
 
 > **Mission**: Build a decentralized, messaging-first platform for P2P NFT trading with escrow smart contracts
 
-##  PROJECT OVERVIEW
+##  PROJECT OV###  **3.2 Homepage & Landing** ✅ COMPLETED
+- [x] **Hero Section:**
+  - [x] Monadeal logo and branding in neon/futuristic style
+  - [x] Value proposition copy with bold, geometric font (`Space Grotesk`)
+  - [x] Call-to-action buttons with animated hover + glow effect
+  - [x] Background animation (particles, gradients, or flowing shapes)
 
-**Monadeal** is a P2P NFT Dealroom where users can:
+- [x] **Deal Creation Form:**
+  - [x] Deal type selector (Buy/Sell/Swap) with active highlight
+  - [x] NFT picker component (with preview animation)
+  - [x] Price input (custom neumorphic field)
+  - [x] Counterparty address input (ENS + clipboard)
+  - [x] "Start Deal" button with gradient pulse animationadeal** is a P2P NFT Dealroom where users can:
 - Chat and negotiate NFT trades in real-time
 - Create buy/sell/swap proposals
 - Execute trades through secure escrow smart contracts
@@ -24,217 +34,253 @@
 
 ##  DETAILED CHECKLIST
 
-##  PHASE 1: FOUNDATION & SMART CONTRACTS
+##  PHASE 1: FOUNDATION & SMART CONTRACTS ✅ COMPLETED
 
-###  **1.1 Project Setup**
-- [ ] Initialize new Next.js project with TypeScript
-- [ ] Install required dependencies:
-  - [ ] wagmi for wallet connections
-  - [ ] iem for blockchain interactions
-  - [ ] @rainbow-me/rainbowkit for wallet UI
-  - [ ] 	ailwindcss for styling
-  - [ ] shadcn/ui for components
-  - [ ] prisma for database
-  - [ ] socket.io for real-time chat
-- [ ] Configure environment variables
-- [ ] Set up project structure
+###  **1.1 Project Setup** ✅ COMPLETED
+- [x] Initialize new Next.js project with TypeScript
+- [x] Install required dependencies:
+  - [x] wagmi for wallet connections
+  - [x] viem for blockchain interactions
+  - [x] @rainbow-me/rainbowkit for wallet UI
+  - [x] tailwindcss for styling
+  - [x] shadcn/ui for components
+  - [x] prisma for database
+  - [x] socket.io for real-time chat
+- [x] Configure environment variables
+- [x] Set up project structure
 
-###  **1.2 Smart Contract Development**
-- [ ] **Create NFT Escrow Smart Contract (Solidity)**
-  - [ ] Support ERC-721 NFT deposits
-  - [ ] Handle ETH/MON payments
-  - [ ] Implement atomic swaps
-  - [ ] Add deal cancellation logic
-  - [ ] Create events: DealCreated, DealCancelled, DealCompleted
-  - [ ] Add getDealStatus(dealId) function
-  - [ ] Optimize for gas efficiency
-  - [ ] Add security checks and reentrancy protection
+###  **1.2 Smart Contract Development** ✅ COMPLETED
+- [x] **Create NFT Escrow Smart Contract (Solidity)**
+  - [x] Support ERC-721 NFT deposits
+  - [x] Handle ETH/MON payments
+  - [x] Implement atomic swaps
+  - [x] Add deal cancellation logic
+  - [x] Create events: DealCreated, DealCancelled, DealCompleted
+  - [x] Add getDealStatus(dealId) function
+  - [x] Optimize for gas efficiency
+  - [x] Add security checks and reentrancy protection
 
-- [ ] **Create Deal Factory Contract**
-  - [ ] Deploy new escrow contracts for each deal
-  - [ ] Track all active deals
-  - [ ] Emit factory events
+- [x] **Create Deal Factory Contract**
+  - [x] Deploy new escrow contracts for each deal
+  - [x] Track all active deals
+  - [x] Emit factory events
 
-- [ ] **Smart Contract Testing**
-  - [ ] Write comprehensive unit tests
-  - [ ] Test edge cases and failure scenarios
-  - [ ] Gas optimization testing
-  - [ ] Security audit checklist
+- [x] **Smart Contract Testing**
+  - [x] Write comprehensive unit tests (27 tests passing)
+  - [x] Test edge cases and failure scenarios
+  - [x] Gas optimization testing
+  - [x] Security audit checklist
 
-###  **1.3 Blockchain Integration Setup**
-- [ ] Configure Monad testnet connection
-- [ ] Set up wallet connection with Wagmi
-- [ ] Create contract interaction hooks
-- [ ] Test contract deployment scripts
+###  **1.3 Blockchain Integration Setup** ✅ COMPLETED
+- [x] Configure Monad testnet connection
+- [x] Set up wallet connection with Wagmi
+- [x] Create contract interaction hooks
+- [x] Test contract deployment scripts
 
 ---
 
 ##  PHASE 2: BACKEND API & SERVICES
 
 ###  **2.1 Database Schema Design**
-- [ ] **Design database models:**
-  - [ ] Users (wallet addresses, profiles)
-  - [ ] Deals (type, participants, NFT details, status)
-  - [ ] Messages (deal chat history)
-  - [ ] NFTs (cached metadata)
-- [ ] Set up Prisma schema
-- [ ] Create database migrations
+- [x] **Design database models:**
+  - [x] Users (wallet addresses, profiles)
+  - [x] Deals (type, participants, NFT details, status)
+  - [x] Messages (deal chat history)
+  - [x] NFTs (cached metadata)
+- [x] Set up Prisma schema
+- [x] Create database migrations
 
 ###  **2.2 Core API Endpoints**
-- [ ] **POST /api/deal** - Create deal proposal
-  - [ ] Validate input data
-  - [ ] Store deal in database
-  - [ ] Return deal ID
+- [x] **POST /api/deal** - Create deal proposal
+  - [x] Validate input data
+  - [x] Store deal in database
+  - [x] Return deal ID
   
-- [ ] **GET /api/deal/:id** - Fetch specific deal
-  - [ ] Include NFT metadata
-  - [ ] Include participant details
-  - [ ] Include current status
+- [x] **GET /api/deal/:id** - Fetch specific deal
+  - [x] Include NFT metadata
+  - [x] Include participant details
+  - [x] Include current status
   
-- [ ] **POST /api/message** - Send chat message
-  - [ ] Validate sender authorization
-  - [ ] Store message with timestamp
-  - [ ] Emit real-time update
+- [x] **POST /api/message** - Send chat message
+  - [x] Validate sender authorization
+  - [x] Store message with timestamp
+  - [x] Emit real-time update
   
-- [ ] **GET /api/messages/:dealId** - Get chat history
-  - [ ] Paginated results
-  - [ ] Filter by participant
+- [x] **GET /api/messages/:dealId** - Get chat history
+  - [x] Paginated results
+  - [x] Filter by participant
   
-- [ ] **GET /api/deals/user/:address** - User's deal history
-  - [ ] Filter by status
-  - [ ] Sort by date
-  - [ ] Include deal summaries
+- [x] **GET /api/deals/user/:address** - User's deal history
+  - [x] Filter by status
+  - [x] Sort by date
+  - [x] Include deal summaries
 
-###  **2.3 NFT Metadata Service**
-- [ ] **Create NFT Metadata Fetcher**
-  - [ ] Integrate with Alchemy NFT API
-  - [ ] Handle IPFS metadata resolution
-  - [ ] Cache metadata in database
-  - [ ] Error handling for invalid NFTs
+###  **2.3 NFT Metadata Service** ✅ COMPLETED
+- [x] **Create NFT Metadata Fetcher**
+  - [x] Integrate with Alchemy NFT API
+  - [x] Handle IPFS metadata resolution
+  - [x] Cache metadata in database
+  - [x] Error handling for invalid NFTs
   
-- [ ] **User NFT Collection Endpoint**
-  - [ ] GET /api/nfts/:address - Fetch user's NFTs
-  - [ ] Filter by collection
-  - [ ] Include metadata and images
+- [x] **User NFT Collection Endpoint**
+  - [x] GET /api/nfts/user/:address - Fetch user's NFTs
+  - [x] GET /api/nft/:contract/:tokenId - Get specific NFT metadata
+  - [x] GET /api/nfts/search - Search NFTs by criteria
+  - [x] GET /api/collections - Get popular collections
+  - [x] GET /api/collections/:address/stats - Collection statistics
+  - [x] POST /api/nfts/refresh - Refresh stale metadata
+  - [x] Filter by collection
+  - [x] Include metadata and images
+  - [x] Ownership validation
+  - [x] React hooks for frontend integration
 
-###  **2.4 Real-time Chat Infrastructure**
-- [ ] Set up Socket.IO server
-- [ ] Create chat rooms per deal ID
-- [ ] Handle user authentication
-- [ ] Implement message broadcasting
-- [ ] Add typing indicators
-- [ ] Handle disconnections
+###  **2.4 Real-time Chat Infrastructure** ✅ COMPLETED
+- [x] Set up Socket.IO server
+- [x] Create chat rooms per deal ID
+- [x] Handle user authentication
+- [x] Implement message broadcasting
+- [x] Add typing indicators
+- [x] Handle disconnections
+- [x] Custom Next.js server integration
+- [x] React hooks for Socket.IO client
+- [x] Real-time notifications
+- [x] User presence tracking
+- [x] Deal update broadcasting
 
 ---
 
-##  PHASE 3: FRONTEND UI/UX
+##  PHASE 3: FRONTEND UI/UX – Monadeal (Monad Testnet)
 
 ###  **3.1 Core Layout & Navigation**
-- [ ] **Create base layout components:**
-  - [ ] Header with wallet connection
-  - [ ] Navigation menu
-  - [ ] Footer
-  - [ ] Loading states
-  - [ ] Error boundaries
+- [] **Create base layout components (glassmorphism + modern grid):**
+  - [] Header with wallet connection (sticky, animated, shadowed)
+  - [] Side navigation menu with Monadeal icons (glass background + neon hover)
+  - [] Footer with links and branding
+  - [] Global loading states (animated skeletons)
+  - [] Error boundaries with fallback UI
 
-- [ ] **Implement dark mode:**
-  - [ ] Monad purple theme
-  - [ ] Toggle functionality
-  - [ ] Persistent preferences
+- [] **Implement dark mode:**
+  - [] Monad purple theme (`#8376FF`, `#2C2446`, `#1B172A`)
+  - [] Glassmorphism backgrounds + subtle gradients
+  - [] Dark/light mode toggle with animated transition
+  - [] Store theme preference in localStorage
+
+---
 
 ###  **3.2 Homepage & Landing**
 - [ ] **Hero Section:**
-  - [ ] Monadeal logo and branding
-  - [ ] Value proposition copy
-  - [ ] Call-to-action buttons
-  - [ ] Background animations
+  - [ ] Monadeal logo and branding in neon/futuristic style
+  - [ ] Value proposition copy with bold, geometric font (`Inter` or `Space Grotesk`)
+  - [ ] Call-to-action buttons with animated hover + glow effect
+  - [ ] Background animation (particles, gradients, or flowing shapes)
 
 - [ ] **Deal Creation Form:**
-  - [ ] Deal type selector (Buy/Sell/Swap)
-  - [ ] NFT picker component
-  - [ ] Price input (for Buy/Sell)
-  - [ ] Counterparty address input
-  - [ ] "Start Deal" button
+  - [ ] Deal type selector (Buy/Sell/Swap) with active highlight
+  - [ ] NFT picker component (with preview animation)
+  - [ ] Price input (custom neumorphic field)
+  - [ ] Counterparty address input (ENS + clipboard)
+  - [ ] “Start Deal” button with gradient pulse animation
 
-###  **3.3 NFT Picker Component**
-- [ ] **Wallet Integration:**
-  - [ ] Connect wallet button
-  - [ ] Display connected address
-  - [ ] Handle wallet switching
-  
-- [ ] **NFT Grid Display:**
-  - [ ] Fetch user's NFTs
-  - [ ] Grid layout with images
-  - [ ] NFT selection functionality
-  - [ ] Search and filter options
-  - [ ] Loading skeletons
+---
 
-###  **3.4 Deal Chatroom Interface**
-- [ ] **Chat Layout (Route: /deal/[dealId]):**
-  - [ ] Sidebar with deal summary
-  - [ ] Main chat panel
-  - [ ] Message input area
-  - [ ] Mobile responsive design
+###  **3.3 NFT Picker Component** ✅ COMPLETED
+- [x] **Wallet Integration:**
+  - [x] Connect wallet button (using RainbowKit)
+  - [x] Display connected address (copyable)
+  - [x] Handle account and network switching
 
-- [ ] **Deal Summary Sidebar:**
-  - [ ] NFT image and details
-  - [ ] Price and deal type
-  - [ ] Participant wallet addresses
-  - [ ] Deal status indicator
-  - [ ] Action buttons (Accept/Cancel)
+- [x] **NFT Grid Display:**
+  - [x] Fetch NFTs owned by connected wallet
+  - [x] Grid layout with image zoom on hover
+  - [x] NFT selection functionality with glowing border
+  - [x] Search and filter options (by collection, tokenId, traits)
+  - [x] Loading skeletons for fetching state
 
-- [ ] **Chat Panel:**
-  - [ ] Message bubbles (sender/receiver styling)
-  - [ ] Timestamps
-  - [ ] Message status indicators
-  - [ ] Scroll to bottom functionality
-  - [ ] Emoji support
+- [x] **Real-time NFT Data:**
+  - [x] Alchemy API integration for live blockchain data
+  - [x] MagicEden integration for floor prices and market data
+  - [x] Smart caching system with Prisma database
+  - [x] IPFS metadata resolution and image handling
 
-- [ ] **Real-time Features:**
-  - [ ] Live message updates
-  - [ ] Typing indicators
-  - [ ] Online/offline status
-  - [ ] Message delivery confirmations
+- [x] **Advanced Features:**
+  - [x] Collection filtering with dynamic dropdown
+  - [x] Real-time search with debouncing
+  - [x] Grid/list view toggle with persistent selection
+  - [x] Deal type awareness (buy/sell/swap behavior)
+  - [x] Error handling and loading states
+  - [x] Mobile-responsive design with glassmorphism styling
 
-###  **3.5 Deal Status Components**
-- [ ] **Status Badge Component:**
-  - [ ] Pending (yellow)
-  - [ ] Awaiting Buyer (blue)
-  - [ ] Awaiting Seller (orange)
-  - [ ] Locked in Escrow (purple)
-  - [ ] Completed (green)
-  - [ ] Cancelled (red)
+---
 
-- [ ] **Status Timeline:**
-  - [ ] Visual progress indicator
-  - [ ] Step descriptions
-  - [ ] Current status highlighting
+###  **3.4 Deal Chatroom Interface** ✅ COMPLETED
+- [x] **Chat Layout (Route: `/deal/[dealId]`):**
+  - [x] Sidebar with deal summary (sticky, glass card)
+  - [x] Main chat panel (scrollable, dark mode)
+  - [x] Message input area with emoji and typing status
+  - [x] Fully mobile responsive layout
 
-###  **3.6 Deal History & Management**
-- [ ] **My Deals Page:**
-  - [ ] Deal list with filters
-  - [ ] Status-based tabs
-  - [ ] Search functionality
-  - [ ] Deal preview cards
+- [x] **Deal Summary Sidebar:**
+  - [x] NFT image, name, collection, metadata
+  - [x] Price and deal type indicator
+  - [x] Buyer/seller wallet address (truncate + ENS)
+  - [x] Deal status badge (color-coded)
+  - [x] Action buttons (Accept/Cancel/Restart)
 
-- [ ] **Deal Detail Views:**
-  - [ ] Comprehensive deal information
-  - [ ] Transaction history
-  - [ ] Chat summary
-  - [ ] Action buttons
+- [x] **Chat Panel:**
+  - [x] Message bubbles with sender/receiver distinction
+  - [x] Timestamps and read receipts
+  - [x] Scroll-to-bottom button with notification badge
+  - [x] Emoji support and message reactions
 
-###  **3.7 Wallet Integration**
-- [ ] **Wallet Connection:**
-  - [ ] RainbowKit integration
-  - [ ] Multiple wallet support
-  - [ ] Network switching
-  - [ ] Account switching
+- [x] **Real-time Features:**
+  - [x] Live updates via socket/pubsub
+  - [x] Typing indicators
+  - [x] Online/offline status for participants
+  - [x] Message delivery confirmation (✓/✓✓)
 
-- [ ] **Transaction Handling:**
-  - [ ] Smart contract interactions
-  - [ ] Transaction status tracking
-  - [ ] Error handling
-  - [ ] Success confirmations
+---
+
+###  **3.5 Deal Status Components** ✅ COMPLETED
+- [x] **Status Badge Component:**
+  - [x] Pending – yellow glow badge
+  - [x] Awaiting Buyer – blue badge
+  - [x] Awaiting Seller – orange badge
+  - [x] Locked in Escrow – purple badge
+  - [x] Completed – green badge with check icon
+  - [x] Cancelled – red badge with strikethrough
+
+- [x] **Status Timeline:**
+  - [x] Visual progress indicator with step icons
+  - [x] Highlight current step with animation
+  - [x] Descriptions and timestamps for each step
+
+---
+
+###  **3.6 Deal History & Management** ✅ COMPLETED
+- [x] **My Deals Page:**
+  - [x] Tabbed deal list (All, Ongoing, Completed, Cancelled)
+  - [x] Search input for deal filtering
+  - [x] Deal preview cards (glassmorphic, status badge, quick actions)
+
+- [x] **Deal Detail Views:**
+  - [x] Full deal data: NFT, price, buyer/seller, status
+  - [x] Transaction history with hash links
+  - [x] Chat summary (if applicable)
+  - [x] Deal reactivation or export buttons
+
+---
+
+###  **3.7 Wallet Integration** ✅ COMPLETED
+- [x] **Wallet Connection:**
+  - [x] RainbowKit integration (multi-wallet, theme-matching)
+  - [x] Support for Monad testnet + auto network switch
+  - [x] Allow account switching with UI feedback
+
+- [x] **Transaction Handling:**
+  - [x] Smart contract calls (start, cancel, accept deal)
+  - [x] Transaction modals with feedback (sending, success, failed)
+  - [x] Status tracking with animated spinners or checkmarks
+  - [x] Error alerts and retry mechanism
 
 ---
 
@@ -271,19 +317,6 @@
   - [ ] Cross-browser compatibility
   - [ ] Mobile responsiveness
   - [ ] Performance testing
-
-###  **4.3 Mock Data & Development Tools**
-- [ ] **Seed Mock Data:**
-  - [ ] Sample deals
-  - [ ] Chat messages
-  - [ ] User profiles
-  - [ ] NFT metadata
-
-- [ ] **Development Utilities:**
-  - [ ] Deal generator script
-  - [ ] Message faker
-  - [ ] NFT mock data
-  - [ ] Test wallet setup
 
 ---
 

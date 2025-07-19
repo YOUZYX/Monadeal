@@ -2,37 +2,617 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #12131B;
-  --foreground: #FBFAF9;
-  --primary: #836EF9;
-}
+@layer base {
+  :root {
+    --background: 220 20% 8%;
+    --foreground: 220 10% 95%;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+    --card: 220 20% 10%;
+    --card-foreground: 220 10% 95%;
+ 
+    --popover: 220 20% 10%;
+    --popover-foreground: 220 10% 95%;
+ 
+    --primary: 263 70% 50%;
+    --primary-foreground: 220 10% 95%;
+ 
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 220 10% 95%;
+ 
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 10% 65%;
+ 
+    --accent: 220 15% 20%;
+    --accent-foreground: 220 10% 95%;
+ 
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 220 10% 95%;
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 263 70% 50%;
+ 
+    --radius: 0.75rem;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+    /* Custom Monad Theme Colors */
+    --monad-purple: 263 70% 50%;
+    --monad-dark: 240 30% 8%;
+    --monad-deep: 240 25% 6%;
   }
+ 
+  .dark {
+    --background: 246 13% 11%; /* Monad Deep */
+    --foreground: 210 40% 98%;
+
+    --card: 240 4% 16%; /* Monad Dark */
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 246 13% 11%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 245 100% 74%; /* Monad Purple */
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 240 4% 16%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 240 4% 16%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 245 100% 74%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    color: hsl(var(--foreground));
+    background: hsl(var(--background));
+    min-height: 100vh;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  /*background: rgba(var(--card) / 0.3);*/
+  background: rgba(21, 11, 49, 0.292);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(131, 118, 255, 0.4);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(131, 118, 255, 0.6);
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.glass-card-purple {
+  background: rgba(131, 110, 249, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(131, 110, 249, 0.4);
+  box-shadow: 0 8px 32px rgba(131, 110, 249, 0.2);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-header {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Monad gradient backgrounds */
+.monad-gradient {
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a855f7 100%);
+}
+
+.monad-gradient-text {
+  background: linear-gradient(135deg, #8376ff 0%, #a855f7 50%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.monad-glow {
+  box-shadow: 0 0 20px rgba(131, 118, 255, 0.3);
+}
+
+.monad-glow-hover:hover {
+  box-shadow: 0 0 30px rgba(131, 118, 255, 0.5);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Neon effects */
+.neon-border {
+  border: 1px solid rgba(131, 118, 255, 0.6);
+  box-shadow: 
+    0 0 5px rgba(131, 118, 255, 0.4),
+    inset 0 0 5px rgba(131, 118, 255, 0.1);
+}
+
+.neon-border:hover {
+  border-color: rgba(131, 118, 255, 0.8);
+  box-shadow: 
+    0 0 15px rgba(131, 118, 255, 0.6),
+    inset 0 0 10px rgba(131, 118, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Animated background */
+.animated-bg {
+  background: radial-gradient(ellipse at top, rgba(131, 118, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom, rgba(131, 118, 255, 0.05) 0%, transparent 50%),
+              linear-gradient(135deg, hsl(var(--monad-deep)) 0%, hsl(var(--monad-dark)) 100%);
+  animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { 
+    background-position: 0% 0%, 100% 100%, 0% 0%;
+  }
+  50% { 
+    background-position: 100% 50%, 0% 50%, 100% 100%;
+  }
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(131, 118, 255, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(131, 118, 255, 0.5); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Hover effects */
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Text effects */
+.text-shadow-glow {
+  text-shadow: 0 0 10px rgba(131, 118, 255, 0.5);
+}
+
+/* Button styles */
+.btn-monad {
+  background: linear-gradient(135deg, #8376ff 0%, #a855f7 100%);
+  border: 1px solid rgba(131, 118, 255, 0.3);
+  color: white;
+  box-shadow: 0 4px 16px rgba(131, 118, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-monad:hover {
+  background: linear-gradient(135deg, #9333ea 0%, #6366f1 100%);
+  box-shadow: 0 8px 24px rgba(131, 118, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-monad:active {
+  transform: translateY(1px);
+  box-shadow: 0 5px 15px rgba(131, 118, 255, 0.3);
+}
+
+/* Card hover effects */
+.card-hover:hover {
+  border-color: rgba(131, 118, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Content sections */
+.content-section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .content-section {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+}
+
+/* Floating Particles Animation */
+@keyframes particle-float-1 {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.3;
+  }
+  33% { 
+    transform: translate(30px, -30px) rotate(120deg);
+    opacity: 0.6;
+  }
+  66% { 
+    transform: translate(-20px, 20px) rotate(240deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes particle-float-2 {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% { 
+    transform: translate(-40px, -20px) rotate(180deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes particle-float-3 {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.2;
+  }
+  25% { 
+    transform: translate(20px, -40px) rotate(90deg);
+    opacity: 0.5;
+  }
+  75% { 
+    transform: translate(-30px, 10px) rotate(270deg);
+    opacity: 0.3;
+  }
+}
+
+@keyframes slideInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.8s ease-out;
+}
+
+.animate-particle-1 {
+  animation: particle-float-1 15s ease-in-out infinite;
+}
+
+.animate-particle-2 {
+  animation: particle-float-2 12s ease-in-out infinite;
+}
+
+.animate-particle-3 {
+  animation: particle-float-3 18s ease-in-out infinite;
+}
+
+/* Animation Delay Classes */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+.delay-2000 {
+  animation-delay: 2s;
+}
+
+/* Enhanced Gradient Backgrounds */
+.gradient-orb-1 {
+  background: radial-gradient(circle, rgba(131, 118, 255, 0.15) 0%, transparent 70%);
+  animation: particle-float-1 20s ease-in-out infinite;
+}
+
+.gradient-orb-2 {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+  animation: particle-float-2 25s ease-in-out infinite;
+}
+
+.gradient-orb-3 {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+  animation: particle-float-3 30s ease-in-out infinite;
+}
+
+/* NFT Card Specific Styles */
+.nft-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.nft-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+
+.nft-card:hover::before {
+  left: 100%;
+}
+
+.nft-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(131, 118, 255, 0.3),
+    0 0 20px rgba(131, 118, 255, 0.2);
+}
+
+.nft-card.selected {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 
+    0 15px 30px rgba(131, 118, 255, 0.4),
+    0 0 0 2px rgba(131, 118, 255, 0.6),
+    0 0 30px rgba(131, 118, 255, 0.3);
+}
+
+.nft-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: linear-gradient(45deg, rgba(131, 118, 255, 0.1), rgba(168, 85, 247, 0.1));
+}
+
+.nft-image-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nft-card:hover .nft-image-container::after {
+  opacity: 1;
+}
+
+.nft-image {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nft-card:hover .nft-image {
+  transform: scale(1.1) rotate(1deg);
+}
+
+/* Rarity Badge Styles */
+.rarity-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rarity-common {
+  background: rgba(156, 163, 175, 0.8);
+  color: #f3f4f6;
+}
+
+.rarity-uncommon {
+  background: rgba(34, 197, 94, 0.8);
+  color: #f0fdf4;
+}
+
+.rarity-rare {
+  background: rgba(59, 130, 246, 0.8);
+  color: #eff6ff;
+}
+
+.rarity-legendary {
+  background: rgba(168, 85, 247, 0.8);
+  color: #faf5ff;
+}
+
+/* Collection Filter Animations */
+.collection-filter {
+  transition: all 0.3s ease;
+}
+
+.collection-filter:hover {
+  background: rgba(131, 118, 255, 0.1);
+  border-color: rgba(131, 118, 255, 0.3);
+}
+
+/* Search Input Enhancements */
+.search-input {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.search-input:focus-within {
+  box-shadow: 
+    0 0 0 3px rgba(131, 118, 255, 0.1),
+    0 0 20px rgba(131, 118, 255, 0.2);
+}
+
+/* Wallet Connection Badge */
+.wallet-badge {
+  background: linear-gradient(135deg, rgba(131, 118, 255, 0.1), rgba(168, 85, 247, 0.1));
+  border: 1px solid rgba(131, 118, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.wallet-badge:hover {
+  background: linear-gradient(135deg, rgba(131, 118, 255, 0.2), rgba(168, 85, 247, 0.2));
+  border-color: rgba(131, 118, 255, 0.4);
+}
+
+/* Loading States for NFT Images */
+.nft-image-loading {
+  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Enhanced Button Styles for NFT Picker */
+.btn-nft-action {
+  background: linear-gradient(135deg, rgba(131, 118, 255, 0.8), rgba(168, 85, 247, 0.8));
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(131, 118, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-nft-action:hover {
+  background: linear-gradient(135deg, rgba(131, 118, 255, 1), rgba(168, 85, 247, 1));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(131, 118, 255, 0.4);
+}
+
+/* Collection Stats Display */
+.collection-stats {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.collection-stats-item {
+  transition: all 0.2s ease;
+}
+
+.collection-stats-item:hover {
+  color: #8376ff;
+  transform: scale(1.05);
 }

@@ -1,0 +1,10 @@
+{
+  "network": "monadTestnet",
+  "deployer": "0x73C978453ebAf65b243d1C42E86BfD8fd2Dff0DA",
+  "dealFactory": "0x6122cb4C6043dd7719e4c4cC46a96d773f5C0C8f",
+  "nftEscrowTemplate": "0x66C721B3Bf13Db6b8FdA9373A236155C5F7d4b84",
+  "feeRecipient": "0x73C978453ebAf65b243d1C42E86BfD8fd2Dff0DA",
+  "platformFee": "250",
+  "timestamp": "2025-07-17T02:45:50.174Z",
+  "blockNumber": 26597712
+}

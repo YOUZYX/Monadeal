@@ -1,0 +1,10 @@
+{
+  "network": "hardhat",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "dealFactory": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "nftEscrowTemplate": "0xa16E02E87b7454126E5E10d957A927A7F5B5d2be",
+  "feeRecipient": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "platformFee": "250",
+  "timestamp": "2025-07-15T03:47:55.125Z",
+  "blockNumber": 1
+}
