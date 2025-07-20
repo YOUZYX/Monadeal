@@ -118,7 +118,7 @@ const Header = () => {
               )}
             </Button>
             
-            {/* Mobile Sidebar Toggle */}
+            {/* Mobile Sidebar Toggle
             <Button
               variant="ghost"
               size="sm"
@@ -126,7 +126,7 @@ const Header = () => {
               onClick={toggle}
             >
               <Menu className="h-5 w-5" />
-            </Button>
+            </Button> */}
 
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3 hover-lift">
@@ -167,7 +167,7 @@ const Header = () => {
           </nav>
 
           {/* Right Section: Actions */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-5">
             
             {/* Search Bar (Desktop) */}
             <form onSubmit={handleDesktopSearch} className="relative hidden lg:block">
@@ -182,7 +182,7 @@ const Header = () => {
               />
             </form>
 
-            {/* Create Deal Button (Desktop) */}
+            {/* Create Deal Button (Desktop)
             <Button
               size="sm"
               className="btn-monad hidden lg:flex items-center space-x-2"
@@ -192,7 +192,7 @@ const Header = () => {
                 <Plus className="h-4 w-4" />
                 <span>Create</span>
               </Link>
-            </Button>
+            </Button>*/}
 
             {/* Notifications */}
             <WalletErrorBoundary>

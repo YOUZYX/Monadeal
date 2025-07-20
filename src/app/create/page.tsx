@@ -15,8 +15,8 @@ export default function CreatePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <div className="min-h-screen">
+      {/* Header 
       <div className="border-b border-border/40 bg-background/95 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
@@ -30,7 +30,7 @@ export default function CreatePage() {
             <h1 className="text-xl font-semibold">Create New Deal</h1>
           </div>
         </div>
-      </div>
+      </div>*/}
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 py-8">

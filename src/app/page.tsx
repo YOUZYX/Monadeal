@@ -256,7 +256,7 @@ export default function Home() {
         )}
       </section>
 
-      {/* Enhanced CTA Section */}
+      {/* Enhanced CTA Section 
       <section className="glass-card rounded-xl p-8 lg:p-12 content-section mx-4 max-w-4xl lg:mx-auto">
         <div className="text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-6 monad-gradient-text">Ready to Start Trading?</h2>
@@ -279,7 +279,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>*/}
     </div>
   );
 }

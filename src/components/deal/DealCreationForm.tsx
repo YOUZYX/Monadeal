@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAccount, usePublicClient } from 'wagmi';
 import { parseEther, Address, decodeEventLog } from 'viem';
 import { Button } from '@/components/ui/button';
@@ -35,16 +35,36 @@ const DealCreationForm: React.FC<DealCreationFormProps> = ({ onClose, onSuccess 
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentStep, setCurrentStep] = useState<'database' | 'blockchain' | 'updating' | 'complete'>('database');
-  const [pendingDealId, setPendingDealId] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<'blockchain' | 'database' | 'complete'>('blockchain');
+  const [pendingTransactionData, setPendingTransactionData] = useState<{
+    dealType: DealType;
+    selectedNFT: SelectedNFT;
+    price: string;
+    counterpartyAddress: string;
+  } | null>(null);
+  
+  // Ref to prevent duplicate API calls
+  const isProcessingRef = useRef(false);
 
   // Use the transactions hook for proper wallet interaction
   const { createDeal, isModalOpen, transactionState, transactionData, closeModal } = useTransactions();
 
-  const handleBlockchainSuccess = async (dealId: string, txHash: string) => {
+  const handleBlockchainSuccess = useCallback(async (txHash: string) => {
     try {
-      // Step 3: Extract escrow address from transaction receipt
-      setCurrentStep('updating');
+      if (!pendingTransactionData) {
+        throw new Error('No pending transaction data found');
+      }
+
+      // Prevent duplicate processing
+      if (isProcessingRef.current) {
+        console.log('Already processing transaction, skipping...');
+        return;
+      }
+      
+      isProcessingRef.current = true;
+
+      // Step 2: Extract escrow address from transaction receipt
+      setCurrentStep('database');
       showInfo('Processing Transaction', 'Extracting escrow address from blockchain...');
       console.log('Extracting escrow address from transaction...');
 
@@ -107,33 +127,46 @@ const DealCreationForm: React.FC<DealCreationFormProps> = ({ onClose, onSuccess 
         }
       }
 
-      // Step 4: Update deal with blockchain data
-      showInfo('Finalizing Deal', 'Updating deal with blockchain data...');
-      console.log('Updating deal with blockchain data...');
+      // Step 3: Now save deal to database with all blockchain data
+      showInfo('Saving Deal', 'Creating deal record in database...');
+      console.log('Creating deal in database with blockchain data...');
 
-      const updateResult = await apiCall(`/api/deal/${dealId}/update-blockchain`, {
+      const dealData = {
+        type: pendingTransactionData.dealType.toUpperCase() as 'BUY' | 'SELL' | 'SWAP',
+        creatorAddress: address,
+        nftContractAddress: pendingTransactionData.selectedNFT.contractAddress,
+        nftTokenId: pendingTransactionData.selectedNFT.tokenId,
+        price: pendingTransactionData.price || undefined,
+        counterpartyAddress: pendingTransactionData.counterpartyAddress || undefined,
+        title: `${pendingTransactionData.dealType === 'buy' ? 'Buy' : pendingTransactionData.dealType === 'sell' ? 'Sell' : 'Swap'} ${pendingTransactionData.selectedNFT.name}`,
+        description: `${pendingTransactionData.dealType === 'buy' ? 'Buy offer for' : pendingTransactionData.dealType === 'sell' ? 'Sell offer for' : 'Swap offer for'} ${pendingTransactionData.selectedNFT.name} from ${pendingTransactionData.selectedNFT.collection?.name || 'Unknown Collection'}`,
+        // Include blockchain data immediately
+        transactionHash: txHash,
+        escrowContractAddress: escrowAddress,
+        onchainDealId: onchainDealId,
+      };
+
+      const result = await apiCall<{ deal: any }>('/api/deal', {
         method: 'POST',
-        body: JSON.stringify({
-          transactionHash: txHash,
-          escrowContractAddress: escrowAddress,
-          onchainDealId: onchainDealId,
-          userAddress: address, // Add user address for transaction tracking
-        }),
+        body: JSON.stringify(dealData),
       }, {
         successTitle: 'Deal Created Successfully',
-        errorTitle: 'Blockchain Update Failed',
+        errorTitle: 'Database Error',
         showSuccessAlert: false, // We'll show custom success
       });
 
-      if (!updateResult) {
-        throw new Error('Failed to update deal with blockchain data');
+      if (!result) {
+        throw new Error('Failed to create deal in database');
       }
 
-      console.log('Deal updated with blockchain data:', updateResult);
+      console.log('Deal created in database with blockchain data:', result);
 
-      // Step 5: Complete
+      // Step 4: Complete
       setCurrentStep('complete');
       showTxSuccess('Deal Created Successfully', txHash);
+      
+      // Clear pending data
+      setPendingTransactionData(null);
       
       // Show success for a moment then close
       setTimeout(() => {
@@ -146,33 +179,34 @@ const DealCreationForm: React.FC<DealCreationFormProps> = ({ onClose, onSuccess 
       }, 2000);
 
     } catch (err) {
-      console.error('Error updating deal with blockchain data:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update deal with blockchain data';
-      showError('Blockchain Update Failed', errorMessage);
+      console.error('Error processing blockchain transaction:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to process blockchain transaction';
+      showError('Deal Creation Failed', errorMessage);
       setError(errorMessage);
-      setCurrentStep('database'); // Reset to initial state
+      setCurrentStep('blockchain'); // Reset to initial state
+      setPendingTransactionData(null);
     } finally {
       setIsLoading(false);
+      isProcessingRef.current = false; // Reset the flag
     }
-  };
+  }, [pendingTransactionData, address, publicClient, apiCall, showInfo, showTxSuccess, showError, setCurrentStep, setError, setPendingTransactionData, setIsLoading, closeModal, onSuccess, onClose]);
 
   // Listen for transaction completion
   useEffect(() => {
-    if (pendingDealId && transactionState === 'success' && transactionData?.hash) {
+    if (pendingTransactionData && transactionState === 'success' && transactionData?.hash) {
       console.log('Transaction completed, hash:', transactionData.hash);
       showTxPending('Deal Creation', transactionData.hash);
-      handleBlockchainSuccess(pendingDealId, transactionData.hash);
-      setPendingDealId(null);
-    } else if (pendingDealId && (transactionState === 'error' || transactionState === 'rejected')) {
+      handleBlockchainSuccess(transactionData.hash);
+    } else if (pendingTransactionData && (transactionState === 'error' || transactionState === 'rejected')) {
       console.error('Transaction failed or was rejected');
       const errorMsg = 'Blockchain transaction failed or was rejected';
       showError('Transaction Failed', errorMsg);
       setError(errorMsg);
-      setCurrentStep('database');
+      setCurrentStep('blockchain');
       setIsLoading(false);
-      setPendingDealId(null);
+      setPendingTransactionData(null);
     }
-  }, [transactionState, transactionData, pendingDealId, handleBlockchainSuccess]);
+  }, [transactionState, transactionData, pendingTransactionData, handleBlockchainSuccess]);
 
   const handleCopyAddress = async () => {
     try {
@@ -207,50 +241,25 @@ const DealCreationForm: React.FC<DealCreationFormProps> = ({ onClose, onSuccess 
     try {
       setIsLoading(true);
       setError(null);
+      isProcessingRef.current = false; // Reset flag for new transaction
 
-      // Step 1: Create deal in database
-      setCurrentStep('database');
-      showInfo('Creating Deal', 'Saving deal to database...');
-      
-      const dealData = {
-        type: dealType.toUpperCase() as 'BUY' | 'SELL' | 'SWAP',
-        creatorAddress: address,
-        nftContractAddress: selectedNFT.contractAddress,
-        nftTokenId: selectedNFT.tokenId,
-        price: price || undefined,
-        counterpartyAddress: counterpartyAddress || undefined,
-        title: `${dealType === 'buy' ? 'Buy' : dealType === 'sell' ? 'Sell' : 'Swap'} ${selectedNFT.name}`,
-        description: `${dealType === 'buy' ? 'Buy offer for' : dealType === 'sell' ? 'Sell offer for' : 'Swap offer for'} ${selectedNFT.name} from ${selectedNFT.collection?.name || 'Unknown Collection'}`,
-      };
-
-      console.log('Creating deal in database:', dealData);
-
-      const result = await apiCall<{ deal: any }>('/api/deal', {
-        method: 'POST',
-        body: JSON.stringify(dealData),
-      }, {
-        successTitle: 'Deal Created',
-        errorTitle: 'Database Error',
-        showSuccessAlert: false, // We'll show custom success after blockchain
-      });
-
-      if (!result) {
-        throw new Error('Failed to create deal in database');
-      }
-
-      console.log('Deal created in database:', result);
-      const createdDeal = result.deal;
-
-      // Step 2: Create deal on blockchain
+      // Step 1: Prepare transaction data and start blockchain transaction first
       setCurrentStep('blockchain');
       showInfo('Blockchain Transaction', 'Preparing smart contract transaction...');
+      
+      // Store transaction data for later database save
+      const transactionData = {
+        dealType,
+        selectedNFT,
+        price,
+        counterpartyAddress,
+      };
+      
+      setPendingTransactionData(transactionData);
 
       const counterpartyAddr = counterpartyAddress || '0x0000000000000000000000000000000000000000';
 
-      // Set pending deal ID so useEffect can handle completion
-      setPendingDealId(createdDeal.id);
-
-      // Start the blockchain transaction
+      // Start the blockchain transaction immediately
       await createDeal({
         dealType: dealType === 'buy' ? 0 : dealType === 'sell' ? 1 : 2,
         counterparty: counterpartyAddr,
@@ -261,15 +270,16 @@ const DealCreationForm: React.FC<DealCreationFormProps> = ({ onClose, onSuccess 
         swapTokenId: '0',
       });
 
-      // Transaction is now pending - useEffect will handle completion
+      // Transaction is now pending - useEffect will handle completion when successful
 
     } catch (err) {
-      console.error('Error creating deal:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create deal';
-      showError('Deal Creation Failed', errorMessage);
+      console.error('Error preparing blockchain transaction:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to prepare blockchain transaction';
+      showError('Transaction Preparation Failed', errorMessage);
       setError(errorMessage);
-      setCurrentStep('database'); // Reset to initial state
+      setCurrentStep('blockchain'); // Reset to initial state
       setIsLoading(false);
+      setPendingTransactionData(null);
     }
   };
 
@@ -375,15 +385,13 @@ const DealCreationForm: React.FC<DealCreationFormProps> = ({ onClose, onSuccess 
             <Loader2 className="h-5 w-5 text-monad-purple animate-spin" />
             <div className="flex-1">
               <p className="text-monad-purple font-medium">
-                {currentStep === 'database' && 'Creating deal in database...'}
                 {currentStep === 'blockchain' && 'Creating deal on blockchain...'}
-                {currentStep === 'updating' && 'Updating deal with blockchain data...'}
+                {currentStep === 'database' && 'Saving deal to database...'}
                 {currentStep === 'complete' && 'Deal created successfully!'}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                {currentStep === 'database' && 'Step 1 of 3: Saving deal information'}
-                {currentStep === 'blockchain' && 'Step 2 of 3: Deploying escrow contract'}
-                {currentStep === 'updating' && 'Step 3 of 3: Finalizing deal'}
+                {currentStep === 'blockchain' && 'Step 1 of 2: Deploying escrow contract'}
+                {currentStep === 'database' && 'Step 2 of 2: Saving deal information'}
                 {currentStep === 'complete' && 'All steps completed!'}
               </p>
             </div>
@@ -604,9 +612,8 @@ const DealCreationForm: React.FC<DealCreationFormProps> = ({ onClose, onSuccess 
               {isLoading ? (
                 <>
                   <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                  {currentStep === 'database' && 'Creating...'}
                   {currentStep === 'blockchain' && 'On Blockchain...'}
-                  {currentStep === 'updating' && 'Finalizing...'}
+                  {currentStep === 'database' && 'Saving...'}
                   {currentStep === 'complete' && 'Complete!'}
                 </>
               ) : (

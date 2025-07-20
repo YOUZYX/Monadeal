@@ -19,6 +19,7 @@ const createDealSchema = z.object({
   // Optional blockchain data (to be filled after client-side transaction)
   transactionHash: z.string().optional(),
   escrowContractAddress: z.string().optional(),
+  onchainDealId: z.string().optional(),
 })
 
 function generateWelcomeMessage(dealData: any, nftName: string): string {
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
       deal = await updateDealStatus(deal.id, 'PENDING', {
         transactionHash: validatedData.transactionHash,
         escrowContractAddress: validatedData.escrowContractAddress,
+        onchainDealId: validatedData.onchainDealId,
       })
     }
 

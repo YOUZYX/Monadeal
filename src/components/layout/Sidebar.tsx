@@ -75,7 +75,7 @@ const Sidebar = () => {
           </div>
 
           {/* Logo Section for desktop - Now sticky */}
-          <div className="mb-8 flex items-center space-x-3 hidden lg:flex sticky top-0 bg-background/80 backdrop-blur-sm py-4 -mx-6 px-6 z-10">
+          <div className="mb-8 flex items-center space-x-3 hidden lg:flex sticky top-0 py-4 -mx-6 px-6 z-10">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-monad-purple to-purple-400 animate-glow">
               <Sparkles className="h-6 w-6 text-white" />
             </div>
@@ -126,7 +126,7 @@ const Sidebar = () => {
           </div>
 
           {/* Bottom Section - Also sticky */}
-          <div className="mt-8 text-center sticky bottom-0 bg-background/80 backdrop-blur-sm py-4 -mx-6 px-6">
+          <div className="mt-8 text-center sticky bottom-0 py-4 -mx-6 px-6">
             <p className="text-xs text-muted-foreground mb-3">
               Built By{' '}
               <span className="monad-gradient-text font-medium">YOUZY</span>
@@ -142,7 +142,7 @@ const Sidebar = () => {
                 className="flex items-center justify-center w-8 h-8 rounded-lg glass-card hover:monad-glow-hover transition-all duration-200 hover-lift"
                 title="Follow on Twitter"
               >
-                <Twitter className="h-4 w-4 text-muted-foreground hover:text-blue-400 transition-colors" />
+                <Twitter className="h-4 w-4 text-muted-foreground hover:text-purple-400 transition-colors" />
               </a>
               
               {/* GitHub Link */}
@@ -150,10 +150,10 @@ const Sidebar = () => {
                 href="https://github.com/YOUZYX/Monadeal"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-8 h-8 rounded-lg glass-dark opacity-50"
-                title="GitHub"
+                className="flex items-center justify-center w-8 h-8 rounded-lg glass-card hover:monad-glow-hover transition-all duration-200 hover-lift"
+                title="Monadeal is Open Source On GitHub"
               >
-                <Github className="h-4 w-4 text-muted-foreground" />
+                <Github className="h-4 w-4 text-muted-foreground hover:text-purple-400 transition-colors" />
               </a>
             </div>
           </div>
