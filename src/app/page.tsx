@@ -189,8 +189,8 @@ export default function Home() {
                 {stats?.volume.formatted.last24h || '0'}
               </div>
             )}
-            <p className="text-sm lg:text-base text-muted-foreground">MON Volume</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">24h</p>
+            <p className="text-sm lg:text-base text-muted-foreground font-medium">MON Volume</p>
+            <p className="text-xs text-muted-foreground/80 mt-1">24h</p>
           </div>
           
           {/* Active Users */}
@@ -206,8 +206,8 @@ export default function Home() {
                 {stats?.users.formatted.activeWeek || '0'}
               </div>
             )}
-            <p className="text-sm lg:text-base text-muted-foreground">Active Users</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">This week</p>
+            <p className="text-sm lg:text-base text-muted-foreground font-medium">Active Users</p>
+            <p className="text-xs text-muted-foreground/80 mt-1">This week</p>
           </div>
           
           {/* Total Trades */}
@@ -223,8 +223,8 @@ export default function Home() {
                 {stats?.deals.formatted.completed || '0'}
               </div>
             )}
-            <p className="text-sm lg:text-base text-muted-foreground">Total Trades</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">All time</p>
+            <p className="text-sm lg:text-base text-muted-foreground font-medium">Total Trades</p>
+            <p className="text-xs text-muted-foreground/80 mt-1">All time</p>
           </div>
           
           {/* Success Rate */}
@@ -240,8 +240,8 @@ export default function Home() {
                 {stats?.successRate.formatted || '0%'}
               </div>
             )}
-            <p className="text-sm lg:text-base text-muted-foreground">Success Rate</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">Last 30 days</p>
+            <p className="text-sm lg:text-base text-muted-foreground font-medium">Success Rate</p>
+            <p className="text-xs text-muted-foreground/80 mt-1">Last 30 days</p>
           </div>
         </div>
 

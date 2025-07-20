@@ -61,7 +61,7 @@ const Sidebar = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold monad-gradient-text">Monadeal</h1>
-                <p className="text-xs text-muted-foreground">P2P NFT Trading</p>
+                <p className="text-xs text-muted-foreground sidebar-muted">P2P NFT Trading</p>
               </div>
             </div>
             <Button
@@ -81,7 +81,7 @@ const Sidebar = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold monad-gradient-text">Monadeal</h1>
-              <p className="text-xs text-muted-foreground">P2P NFT Trading</p>
+              <p className="text-xs text-muted-foreground sidebar-muted">P2P NFT Trading</p>
             </div>
           </div>
 
@@ -99,8 +99,8 @@ const Sidebar = () => {
                     className={cn(
                       "flex items-center space-x-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 hover-lift",
                       isActive
-                        ? "glass-card monad-glow text-white"
-                        : "text-muted-foreground hover:text-foreground hover:glass-dark"
+                        ? "sidebar-link-active monad-glow sidebar-text"
+                        : "sidebar-link-inactive hover:sidebar-text"
                     )}
                     onClick={() => {
                       // Close sidebar on mobile when clicking a link
@@ -112,7 +112,7 @@ const Sidebar = () => {
                     <Icon 
                       className={cn(
                         "h-5 w-5 transition-colors",
-                        isActive ? "text-monad-purple" : "text-muted-foreground"
+                        isActive ? "text-monad-purple sidebar-text" : "text-muted-foreground sidebar-link-inactive"
                       )} 
                     />
                     <span>{item.name}</span>
@@ -127,7 +127,7 @@ const Sidebar = () => {
 
           {/* Bottom Section - Also sticky */}
           <div className="mt-8 text-center sticky bottom-0 py-4 -mx-6 px-6">
-            <p className="text-xs text-muted-foreground mb-3">
+            <p className="text-xs text-muted-foreground sidebar-muted mb-3">
               Built By{' '}
               <span className="monad-gradient-text font-medium">YOUZY</span>
             </p>
@@ -142,7 +142,7 @@ const Sidebar = () => {
                 className="flex items-center justify-center w-8 h-8 rounded-lg glass-card hover:monad-glow-hover transition-all duration-200 hover-lift"
                 title="Follow on Twitter"
               >
-                <Twitter className="h-4 w-4 text-muted-foreground hover:text-purple-400 transition-colors" />
+                <Twitter className="h-4 w-4 text-muted-foreground sidebar-muted hover:text-purple-400 transition-colors" />
               </a>
               
               {/* GitHub Link */}
@@ -153,7 +153,7 @@ const Sidebar = () => {
                 className="flex items-center justify-center w-8 h-8 rounded-lg glass-card hover:monad-glow-hover transition-all duration-200 hover-lift"
                 title="Monadeal is Open Source On GitHub"
               >
-                <Github className="h-4 w-4 text-muted-foreground hover:text-purple-400 transition-colors" />
+                <Github className="h-4 w-4 text-muted-foreground sidebar-muted hover:text-purple-400 transition-colors" />
               </a>
             </div>
           </div>
